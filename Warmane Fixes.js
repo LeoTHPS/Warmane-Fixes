@@ -23,9 +23,19 @@ var WarmaneFixes = {
         Armory: {
             Guild: {
                 Summary: {
+                    OddTextColor: '#777777',
+                    OddBackgroundColor: '#060606',
+
+                    EvenTextColor: '#777777',
+                    EvenBackgroundColor: '#131313'
                 },
 
                 BossFights: {
+                    OddTextColor: '#777777',
+                    OddBackgroundColor: '#060606',
+
+                    EvenTextColor: '#777777',
+                    EvenBackgroundColor: '#131313'
                 }
             },
 
@@ -50,10 +60,10 @@ var WarmaneFixes = {
 
                 Statistics: {
                     OddTextColor: '#777777',
-                    OddBackgroundColor: '#131313',
+                    OddBackgroundColor: '#060606',
 
                     EvenTextColor: '#777777',
-                    EvenBackgroundColor: '#060606'
+                    EvenBackgroundColor: '#131313'
                 },
 
                 MountsAndCompanions: {
@@ -138,22 +148,17 @@ WarmaneFixes.UpdateIndex = function() {
 
 WarmaneFixes.UpdateArmory = function() {
     var query = WarmaneFixes.URL.Path.match(
-        /\/(\w+)\/([A-Za-z ]+)\/([A-Za-z]+)\/(\w+)/
+        /\/([^\/]+)\/([^\/]+)\/([^\/]+)\/([^\/]+)/
     );
-
+    
     if (query != null) {
-        var query_type = query[1];
-        var query_name = query[2];
-        var query_realm = query[3];
-        var query_subType = query[4];
-        
-        switch (query_type) {
+        switch (query[1]) {
             case 'guild':
-                WarmaneFixes.UpdateArmoryGuild(query_name, query_realm, query_subType);
+                WarmaneFixes.UpdateArmoryGuild(query[2], query[3], query[4]);
                 break;
 
             case 'character':
-                WarmaneFixes.UpdateArmoryCharacter(query_name, query_realm, query_subType);
+                WarmaneFixes.UpdateArmoryCharacter(query[2], query[3], query[4]);
                 break;
         }
     }
@@ -172,11 +177,41 @@ WarmaneFixes.UpdateArmoryGuild = function(name, realm, type) {
 }
 
 WarmaneFixes.UpdateArmoryGuildSummary = function(name, realm) {
+    var style = WarmaneFixes.CreateElement('style');
 
+    style.html(
+        '#data-table > tbody tr.odd {' +
+            'color: ' + WarmaneFixes.Config.Armory.Guild.Summary.OddTextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Guild.Summary.OddBackgroundColor + ' !important;' +
+        '}\n' +
+        '#data-table > tbody tr.even {' +
+            'color: ' + WarmaneFixes.Config.Armory.Guild.Summary.EvenTextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Guild.Summary.EvenBackgroundColor + ' !important;' +
+        '}'
+    );
+
+    $('head').append(
+        style
+    );
 }
 
 WarmaneFixes.UpdateArmoryGuildBossFights = function(name, realm) {
+    var style = WarmaneFixes.CreateElement('style');
 
+    style.html(
+        '#data-table > tbody tr.odd {' +
+            'color: ' + WarmaneFixes.Config.Armory.Guild.BossFights.OddTextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Guild.BossFights.OddBackgroundColor + ' !important;' +
+        '}\n' +
+        '#data-table > tbody tr.even {' +
+            'color: ' + WarmaneFixes.Config.Armory.Guild.BossFights.EvenTextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Guild.BossFights.EvenBackgroundColor + ' !important;' +
+        '}'
+    );
+
+    $('head').append(
+        style
+    );
 }
 
 WarmaneFixes.UpdateArmoryCharacter = function (name, realm, type) {
