@@ -38,12 +38,22 @@ var WarmaneFixes = {
                 },
 
                 Achievements: {
+                    TextColor: '#606060',
+                    BackgroundColor: '#0d0d0d',
+                    
+                    CompletedTextColor: '#12b500',
+                    CompletedBackgroundColor: '#0d0d0d'
                 },
 
                 Talents: {
                 },
 
                 Statistics: {
+                    OddTextColor: '#777777',
+                    OddBackgroundColor: '#131313',
+
+                    EvenTextColor: '#777777',
+                    EvenBackgroundColor: '#060606'
                 },
 
                 MountsAndCompanions: {
@@ -128,15 +138,15 @@ WarmaneFixes.UpdateIndex = function() {
 
 WarmaneFixes.UpdateArmory = function() {
     var query = WarmaneFixes.URL.Path.match(
-        /\/(\w+)\/([A-Za-z ]+)\/([A-Za-z]+)\/(\w+)/g
+        /\/(\w+)\/([A-Za-z ]+)\/([A-Za-z]+)\/(\w+)/
     );
 
     if (query != null) {
-        var query_type = query[0];
-        var query_name = query[1];
-        var query_realm = query[2];
-        var query_subType = query[3];
-
+        var query_type = query[1];
+        var query_name = query[2];
+        var query_realm = query[3];
+        var query_subType = query[4];
+        
         switch (query_type) {
             case 'guild':
                 WarmaneFixes.UpdateArmoryGuild(query_name, query_realm, query_subType);
@@ -169,7 +179,7 @@ WarmaneFixes.UpdateArmoryGuildBossFights = function(name, realm) {
 
 }
 
-WarmaneFixes.UpdateArmoryCharacter = function(name, realm, type) {
+WarmaneFixes.UpdateArmoryCharacter = function (name, realm, type) {
     switch (type) {
         case 'summary':
             WarmaneFixes.UpdateArmoryCharacterSummary(name, realm);
@@ -211,8 +221,23 @@ WarmaneFixes.UpdateArmoryCharacterMatchHistory = function(name, realm) {
 
 }
 
-WarmaneFixes.UpdateArmoryCharacterAchievements = function(name, realm) {
+WarmaneFixes.UpdateArmoryCharacterAchievements = function (name, realm) {
+    var style = WarmaneFixes.CreateElement('style');
 
+    style.html(
+        '.achievement {' +
+            'color: ' + WarmaneFixes.Config.Armory.Character.Achievements.TextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Character.Achievements.BackgroundColor + ' !important;' +
+        '}\n' +
+        '.achievement:not(.locked) {' +
+            'color: ' + WarmaneFixes.Config.Armory.Character.Achievements.CompletedTextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Character.Achievements.CompletedBackgroundColor + ' !important;' +
+        '}'
+    );
+
+    $('head').append(
+        style
+    );
 }
 
 WarmaneFixes.UpdateArmoryCharacterTalents = function(name, realm) {
@@ -220,7 +245,22 @@ WarmaneFixes.UpdateArmoryCharacterTalents = function(name, realm) {
 }
 
 WarmaneFixes.UpdateArmoryCharacterStatistics = function(name, realm) {
+    var style = WarmaneFixes.CreateElement('style');
 
+    style.html(
+        '#data-table > tbody tr.odd {' +
+            'color: ' + WarmaneFixes.Config.Armory.Character.Statistics.OddTextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Character.Statistics.OddBackgroundColor + ' !important;' +
+        '}\n' +
+        '#data-table > tbody tr.even {' +
+            'color: ' + WarmaneFixes.Config.Armory.Character.Statistics.EvenTextColor + ' !important;' +
+            'background-color: ' + WarmaneFixes.Config.Armory.Character.Statistics.EvenBackgroundColor + ' !important;' +
+        '}'
+    );
+
+    $('head').append(
+        style
+    );
 }
 
 WarmaneFixes.UpdateArmoryCharacterMountsAndCompanions = function(name, realm) {
@@ -467,7 +507,7 @@ WarmaneFixes.UpdateForum = function() {
                 WarmaneFixes.Config.Forum.ReportSubForum + '&pp=50';
 
             WarmaneFixes.GetPageAsync(url, function(result) {
-                var threads = $(result).find('.threadbit').not('.lock');
+                var threads = $(result).find('.threadbit:not(.lock)');
 
                 if (threads && threads.length) {
                     var report_list = WarmaneFixes.CreateElement('ul');
@@ -577,8 +617,8 @@ WarmaneFixes.UpdateForum = function() {
     });
 
     // dim read threads
-    $('.searchtitle a.title').not('.threadtitle_unread').css('color', '#66666c');
-    $('.threadmeta .author a.title').not('.threadtitle_unread').css('color', '#66666c');
+    $('.searchtitle a.title:not(.threadtitle_unread)').css('color', '#66666c');
+    $('.threadmeta .author a.title:not(.threadtitle_unread)').css('color', '#66666c');
 
     // override lock icon on threads
     $('li.lock .threadstatus').css('background-image', 'url(' + WarmaneFixes.Config.Forum.LockIcon + ')');
