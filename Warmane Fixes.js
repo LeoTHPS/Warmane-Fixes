@@ -214,7 +214,7 @@ WarmaneFixes.UpdateArmoryGuildBossFights = function(name, realm) {
     );
 }
 
-WarmaneFixes.UpdateArmoryCharacter = function (name, realm, type) {
+WarmaneFixes.UpdateArmoryCharacter = function(name, realm, type) {
     switch (type) {
         case 'summary':
             WarmaneFixes.UpdateArmoryCharacterSummary(name, realm);
@@ -256,7 +256,7 @@ WarmaneFixes.UpdateArmoryCharacterMatchHistory = function(name, realm) {
 
 }
 
-WarmaneFixes.UpdateArmoryCharacterAchievements = function (name, realm) {
+WarmaneFixes.UpdateArmoryCharacterAchievements = function(name, realm) {
     var style = WarmaneFixes.CreateElement('style');
 
     style.html(
@@ -395,7 +395,7 @@ WarmaneFixes.UpdateForum = function() {
                             'underline'
                         );
                     },
-                    function () {
+                    function() {
                         side_panel_nav_links_entry_link.css(
                             'text-decoration',
                             'none'
@@ -641,7 +641,7 @@ WarmaneFixes.UpdateForum = function() {
     }
 
     // fix new message links
-    $('#notifications > ul.popupbody > li > a').each(function () {
+    $('#notifications > ul.popupbody > li > a').each(function() {
         var obj = $(this);
 
         if (obj.attr('href').indexOf('tab=visitor_messaging') !== -1) {
@@ -659,7 +659,7 @@ WarmaneFixes.UpdateForum = function() {
     $('li.lock .threadstatus').css('background-image', 'url(' + WarmaneFixes.Config.Forum.LockIcon + ')');
 
     // override thread prefix colors and add brackets
-    $('.threadbit').each(function () {
+    $('.threadbit').each(function() {
         var obj = $(this).children().find('.prefix');
 
         if (obj !== null) {
@@ -736,7 +736,7 @@ WarmaneFixes.UpdateForumProfile = function(name) {
             $('#user_avatar').attr('src').replace('&type=thumb', '')
         );
 
-        $('.friends_list a.image_friend_link > img').each(function () {
+        $('.friends_list a.image_friend_link > img').each(function() {
             var obj = $(this);
 
             obj.attr(
@@ -747,7 +747,7 @@ WarmaneFixes.UpdateForumProfile = function(name) {
     }
 
     // fix group icons and enlarge images
-    $('a.group_pic').each(function (index, value) {
+    $('a.group_pic').each(function(index, value) {
         var obj = $(value);
 
         var group_href = obj.attr('href');
@@ -816,12 +816,12 @@ WarmaneFixes.UpdateForumProfile = function(name) {
     }
 }
 
-WarmaneFixes.UpdateForumThread = function () {
+WarmaneFixes.UpdateForumThread = function() {
     // show current thread rating
     $('#threadrating_current').removeClass('hidden');
 
     // show user online/offline icon next to names
-    $('div.username_container').each(function (obj) {
+    $('div.username_container').each(function(obj) {
         obj = $(this);
         var obj_link = obj.find('a.username');
 
