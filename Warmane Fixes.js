@@ -746,6 +746,11 @@ WarmaneFixes.UpdateForumProfile = function(name) {
         });
     }
 
+    // brighten infraction reason/date/expiration/points
+    $('.infractionbit').css('color', '#7b7b7b');
+    $('.infractionbit .time').removeClass('time');
+    $('.infractionbit .shade').removeClass('shade');
+
     // fix group icons and enlarge images
     $('a.group_pic').each(function(index, value) {
         var obj = $(value);
