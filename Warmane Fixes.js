@@ -552,10 +552,11 @@ WarmaneFixes.UpdateForum = function() {
                         'none'
                     );
 
-                    $(threads).each(function(index, value) {
-                        var link = $(value).find('a.title');
+                    $(threads).each(function (index, value) {
+                        var obj = $(value);
+                        var link = obj.find('a.title');
 
-                        if (link.text().indexOf('Reported') !== -1) {
+                        if (link.text().indexOf('Reported Post by ') !== -1) {
                             var report_list_entry_link = WarmaneFixes.CreateElement('a');
 
                             report_list_entry_link.css(
@@ -588,11 +589,11 @@ WarmaneFixes.UpdateForum = function() {
 
                             report_list_entry_link.attr({
                                 'href': link.attr('href'),
-                                'title': value.find('div.threadinfo').attr('title')
+                                'title': obj.find('div.threadinfo').attr('title')
                             });
 
                             report_list_entry_link.text(
-                                'Report by ' + value.find('dl.threadauthor dt').text()
+                                'Report by ' + obj.find('dl.threadauthor dt').text()
                             );
 
                             var report_list_entry = WarmaneFixes.CreateElement('li');
