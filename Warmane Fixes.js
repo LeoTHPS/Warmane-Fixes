@@ -556,7 +556,10 @@ WarmaneFixes.UpdateForum = function() {
                         var obj = $(value);
                         var link = obj.find('a.title');
 
-                        if (link.text().indexOf('Reported Post by ') !== -1) {
+                        var text = link.text();
+
+                        if ((text.indexOf('Reported Post by ') !== -1) ||
+                            (text.indexOf('Reported Visitor Message by ') !== -1)) {
                             var report_list_entry_link = WarmaneFixes.CreateElement('a');
 
                             report_list_entry_link.css(
@@ -851,7 +854,7 @@ WarmaneFixes.UpdateForumThread = function() {
     $('div.posthead span.nodecontrols').each(function() {
         var obj = $(this);
 
-        if (objtext().indexOf('Moderated Post') !== -1) {
+        if (obj.text().indexOf('Moderated Post') !== -1) {
             obj.css('color', '#ff0000');
         }
     });
@@ -859,14 +862,23 @@ WarmaneFixes.UpdateForumThread = function() {
     // fix profile link if thread is part of infraction and report discussion
     {
         var navbits = $('#breadcrumb > ul.floatcontainer').find('a');
-
+        
         if (navbits.eq(navbits.length - 1).attr('href').endsWith(WarmaneFixes.Config.Forum.ReportSubForum)) {
             $('.postrow').find('.postcontent').find('a').each(function() {
                 var obj = $(this);
                 var href = obj.attr('href');
 
                 if (href.endsWith('/member.php')) {
-                    obj.attr('href', href + '?username=' + obj.text());
+                    obj.attr(
+                        'href',
+                        href + '?username=' + obj.text()
+                    );
+                }
+                else if (matches = href.match(/\/member\.php\?tab=visitor_messaging&vmid=(\d+)#vmessage(\d+)/)) {
+                    obj.attr(
+                        'href',
+                        'http://forum.warmane.com/member.php?username=' + obj.text() + '&tab=visitor_messaging&vmid=' + matches[1] + '#vmessage' + matches[2]
+                    );
                 }
             });
         }
