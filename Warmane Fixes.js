@@ -103,19 +103,20 @@ var WarmaneFixes = {
 };
 
 WarmaneFixes.Update = function(event) {
+    var videoFrame = $('#page-frame');
+    
     if (event === 'load') {
         if (WarmaneFixes.Config.Theme.RemoveVideo) {
-            var videoFrame = $('#page-frame');
-            var video = videoFrame.find('video');
-
-            video.get(0).pause();
-
             videoFrame.empty();
             videoFrame.height(210);
         }
     }
 
     if (event === 'ready') {
+        if (WarmaneFixes.Config.Theme.RemoveVideo) {
+            videoFrame.find('video').get(0).pause();
+        }
+
         if (WarmaneFixes.Config.Theme.ReplaceBackground) {
             $('html').css(
                 'background-color', 'transparent'
