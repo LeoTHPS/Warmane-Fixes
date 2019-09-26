@@ -726,9 +726,7 @@ WarmaneFixes.UpdateForumProfile = function(event, name) {
                     (obj.attr('id') === 'pagination_bottom')) {
 
                     // get links
-                    var nav_page_links = obj.children('form').children('span');
-
-                    $(nav_page_links).each(function () {
+                    $(obj.children('form').children('span')).each(function() {
                         // test if the link is real
                         var a = $(this).children('a');
                         var href = a.attr('href');
