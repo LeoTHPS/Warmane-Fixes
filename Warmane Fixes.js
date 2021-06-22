@@ -338,7 +338,7 @@ WarmaneFixes.UpdateForum = function() {
 
         navtabs_entry_mcp_link.attr({
             'target': '_blank',
-            'href': '//forum.warmane.com/modcp'
+            'href': '//forum.warmane.com/modcp/'
         });
 
         navtabs_entry_mcp_link.text('MODCP');
