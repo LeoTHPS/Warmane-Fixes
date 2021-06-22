@@ -778,7 +778,7 @@ WarmaneFixes.UpdateForumProfile = function(name) {
 
         group_img.attr(
             'src',
-            'http://forum.warmane.com/image.php?groupid=' + group_id + '&dateline=' + $.now() + '&type=groupthumb'
+            '//forum.warmane.com/image.php?groupid=' + group_id + '&dateline=' + $.now() + '&type=groupthumb'
         );
     });
 
@@ -883,7 +883,7 @@ WarmaneFixes.UpdateForumThread = function() {
                 else if (matches = href.match(/\/member\.php\?tab=visitor_messaging&vmid=(\d+)#vmessage(\d+)/)) {
                     obj.attr(
                         'href',
-                        'http://forum.warmane.com/member.php?username=' + obj.text() + '&tab=visitor_messaging&vmid=' + matches[1] + '#vmessage' + matches[2]
+                        '//forum.warmane.com/member.php?username=' + obj.text() + '&tab=visitor_messaging&vmid=' + matches[1] + '#vmessage' + matches[2]
                     );
                 }
             });
