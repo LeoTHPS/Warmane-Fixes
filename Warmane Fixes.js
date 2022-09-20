@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Warmane Fixes v2
 // @namespace    http*://*.warmane.com/
-// @version      1.1
+// @version      1.1.1
 // @description  Fixes various template errors and adds quality of life changes
 // @author       LeoTHPS
 // @noframes
@@ -567,6 +567,7 @@ WarmaneFixes.UpdateForum = function() {
                         var text = link.text();
 
                         if ((text.indexOf('Reported Post by ') !== -1) ||
+							(text.indexOf('Reported Private Message') !== -1) ||
                             (text.indexOf('Reported Visitor Message by ') !== -1)) {
                             var report_list_entry_link = WarmaneFixes.CreateElement('a');
 
