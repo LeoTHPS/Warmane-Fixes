@@ -567,7 +567,7 @@ WarmaneFixes.UpdateForum = function() {
                         var text = link.text();
 
                         if ((text.indexOf('Reported Post by ') !== -1) ||
-							(text.indexOf('Reported Private Message') !== -1) ||
+							(text.indexOf('Reported Private Message by ') !== -1) ||
                             (text.indexOf('Reported Visitor Message by ') !== -1)) {
                             var report_list_entry_link = WarmaneFixes.CreateElement('a');
 
