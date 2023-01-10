@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Warmane Fixes v2
 // @namespace    http*://*.warmane.com/
-// @version      1.1.1
+// @version      1.1.2
 // @description  Fixes various template errors and adds quality of life changes
 // @author       LeoTHPS
 // @noframes
@@ -865,7 +865,26 @@ WarmaneFixes.UpdateForumThread = function() {
             obj.css('color', '#ff0000');
         }
     });
-    
+
+	// override post foreground color if it matches background
+	$('#postlist li.postcontainer').each(function() {
+		var obj = $(this);
+		var postrow = obj.find('div.postrow').first();
+		var content = postrow.find('div.content').first();
+		var postcontent = content.find('.postcontent').first();
+
+		postcontent.find('font[color]').each(function() {
+			var obj = $(this);
+			var color = WarmaneFixes.GetColorAsInteger(obj.css('color'));
+			var color_background = WarmaneFixes.GetColorAsInteger($('body').first().css('background-color'));
+			var color_foreground = WarmaneFixes.GetColorAsHex(postrow.css('color'));
+
+			if (color === color_background) {
+				obj.css('color', color_foreground);
+			}
+		});
+	});
+
     // fix profile link if thread is part of infraction and report discussion
     {
         var navbits = $('#breadcrumb > ul.floatcontainer').find('a');
@@ -903,6 +922,14 @@ WarmaneFixes.CreateElement = function(type) {
     var element = document.createElement(type);
 
     return $(element);
+}
+
+WarmaneFixes.GetColorAsHex = function(value) {
+	return '#' + value.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/).slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0')).join('');
+}
+
+WarmaneFixes.GetColorAsInteger = function(value) {
+	return parseInt(WarmaneFixes.GetColorAsHex(value).substr(1), 16);
 }
 
 $(window).on('load', function() {
