@@ -872,15 +872,15 @@ WarmaneFixes.UpdateForumThread = function() {
 		var postrow = obj.find('div.postrow').first();
 		var content = postrow.find('div.content').first();
 		var postcontent = content.find('.postcontent').first();
+		var postrow_color_hex = WarmaneFixes.GetColorAsHex(postrow.css('color'));
+		var postrow_background_color = $('body').first().css('background-color');
 
 		postcontent.find('font[color]').each(function() {
 			var obj = $(this);
-			var color = WarmaneFixes.GetColorAsInteger(obj.css('color'));
-			var color_background = WarmaneFixes.GetColorAsInteger($('body').first().css('background-color'));
-			var color_foreground = WarmaneFixes.GetColorAsHex(postrow.css('color'));
+			var color_foreground = obj.css('color');
 
-			if (color === color_background) {
-				obj.css('color', color_foreground);
+			if (WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
+				obj.css('color', postrow_color_hex);
 			}
 		});
 	});
@@ -930,6 +930,36 @@ WarmaneFixes.GetColorAsHex = function(value) {
 
 WarmaneFixes.GetColorAsInteger = function(value) {
 	return parseInt(WarmaneFixes.GetColorAsHex(value).substr(1), 16);
+}
+
+WarmaneFixes.CompareColors = function(color1, color2, range) {
+	color1 = WarmaneFixes.GetColorAsInteger(color1);
+	color2 = WarmaneFixes.GetColorAsInteger(color2);
+
+	var color1_r = (color1 & 0xFF0000) >> 16;
+	var color1_g = (color1 & 0x00FF00) >> 8;
+	var color1_b = color1 & 0x0000FF;
+
+	var color2_r = (color2 & 0xFF0000) >> 16;
+	var color2_g = (color2 & 0x00FF00) >> 8;
+	var color2_b = color2 & 0x0000FF;
+
+	return WarmaneFixes.CompareColorChannels(color1_r, color2_r, range) &&
+			WarmaneFixes.CompareColorChannels(color1_g, color2_g, range) &&
+			WarmaneFixes.CompareColorChannels(color1_b, color2_b, range);
+}
+
+WarmaneFixes.CompareColorChannels = function(channel1, channel2, range) {
+	if (channel1 >= channel2) {
+		if ((channel1 - channel2) <= range) {
+			return true;
+		}
+	}
+	else if ((channel2 - channel1) <= range) {
+		return true;
+	}
+
+	return false;
 }
 
 $(window).on('load', function() {
