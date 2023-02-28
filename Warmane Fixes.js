@@ -332,6 +332,25 @@ WarmaneFixes.UpdateForum = function() {
         WarmaneFixes.Config.Forum.DisplayName
     );
 
+	// add BBCode to #navtabs
+	{
+		var navtabs_entry_bbcode_link = WarmaneFixes.CreateElement('a');
+
+        navtabs_entry_bbcode_link.attr({
+            'target': '_blank',
+            'href': '//forum.warmane.com/misc.php?do=bbcode'
+        });
+
+        navtabs_entry_bbcode_link.text('BBCode');
+        navtabs_entry_bbcode_link.addClass('navtab');
+
+        var navtabs_entry_bbcode = WarmaneFixes.CreateElement('li');
+
+        navtabs_entry_bbcode.append(navtabs_entry_bbcode_link);
+
+        $('ul#navtabs').append(navtabs_entry_bbcode);
+	}
+
     // add ModCP to #navtabs
     if (WarmaneFixes.Config.Forum.IsModerator) {
         var navtabs_entry_mcp_link = WarmaneFixes.CreateElement('a');
