@@ -898,9 +898,7 @@ WarmaneFixes.UpdateForumThread = function() {
 			var obj = $(this);
 			var color_foreground = obj.css('color');
 
-			alert('foreground: ' + color_foreground + ', html: ' + postcontent.html());
-
-			if (!WarmaneFixes.CompareColors(color_foreground, '#505050', 20) || !WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
+			if (!WarmaneFixes.CompareColors(color_foreground, '#505050', 10) || !WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
 				obj.css('color', postrow_color_hex);
 			}
 		});
@@ -954,8 +952,6 @@ WarmaneFixes.TryGetColorAsInteger = function(value) {
 WarmaneFixes.CompareColors = function(color1, color2, range) {
 	color1 = WarmaneFixes.TryGetColorAsInteger(color1);
 	color2 = WarmaneFixes.TryGetColorAsInteger(color2);
-
-	alert('color1: ' + color1 + ', color2: ' + color2);
 
 	if ((color1 === null) ^ (color2 === null)) {
 		return false;
