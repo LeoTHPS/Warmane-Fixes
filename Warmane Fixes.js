@@ -891,14 +891,16 @@ WarmaneFixes.UpdateForumThread = function() {
 		var postrow = obj.find('div.postrow').first();
 		var content = postrow.find('div.content').first();
 		var postcontent = content.find('.postcontent').first();
-		var postrow_color_hex = WarmaneFixes.GetColorAsHex(postrow.css('color'));
+		var postrow_color_hex = postrow.css('color');
 		var postrow_background_color = $('body').first().css('background-color');
 
 		postcontent.find('font[color]').each(function() {
 			var obj = $(this);
 			var color_foreground = obj.css('color');
 
-			if (WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
+			alert('foreground: ' + color_foreground + ', html: ' + postcontent.html());
+
+			if (!WarmaneFixes.CompareColors(color_foreground, '#505050', 20) || !WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
 				obj.css('color', postrow_color_hex);
 			}
 		});
@@ -943,17 +945,21 @@ WarmaneFixes.CreateElement = function(type) {
     return $(element);
 }
 
-WarmaneFixes.GetColorAsHex = function(value) {
-	return '#' + value.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/).slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0')).join('');
-}
+WarmaneFixes.TryGetColorAsInteger = function(value) {
+	var match = value.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
 
-WarmaneFixes.GetColorAsInteger = function(value) {
-	return parseInt(WarmaneFixes.GetColorAsHex(value).substr(1), 16);
+	return match ? parseInt(match.slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0')).join(''), 16) : null;
 }
 
 WarmaneFixes.CompareColors = function(color1, color2, range) {
-	color1 = WarmaneFixes.GetColorAsInteger(color1);
-	color2 = WarmaneFixes.GetColorAsInteger(color2);
+	color1 = WarmaneFixes.TryGetColorAsInteger(color1);
+	color2 = WarmaneFixes.TryGetColorAsInteger(color2);
+
+	alert('color1: ' + color1 + ', color2: ' + color2);
+
+	if ((color1 === null) ^ (color2 === null)) {
+		return false;
+	}
 
 	var color1_r = (color1 & 0xFF0000) >> 16;
 	var color1_g = (color1 & 0x00FF00) >> 8;
