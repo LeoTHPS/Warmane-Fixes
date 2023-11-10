@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Warmane Fixes v2
 // @namespace    http*://*.warmane.com/
-// @version      1.1.2
+// @version      1.1.3
 // @description  Fixes various template errors and adds quality of life changes
 // @author       LeoTHPS
 // @noframes
