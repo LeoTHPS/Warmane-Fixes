@@ -885,21 +885,31 @@ WarmaneFixes.UpdateForumThread = function() {
 		}
 	});
 
-	// override post foreground color if it matches background
+	// override link foreground color if it's too close to post/quote foreground/background color
 	$('#postlist li.postcontainer').each(function() {
 		var obj = $(this);
 		var postrow = obj.find('div.postrow').first();
 		var content = postrow.find('div.content').first();
 		var postcontent = content.find('.postcontent').first();
-		var postrow_color_hex = postrow.css('color');
+		var postrow_foreground_color = postcontent.css('color');
 		var postrow_background_color = $('body').first().css('background-color');
+		var postrow_bbcode_quote = postcontent.find('div.bbcode_quote').first() || null;
+		var postrow_bbcode_quote_foreground = postrow_bbcode_quote.css('color');
+		var postrow_bbcode_quote_background = postrow_bbcode_quote.css('background-color');
 
 		postcontent.find('font[color]').each(function() {
 			var obj = $(this);
 			var color_foreground = obj.css('color');
 
-			if (!WarmaneFixes.CompareColors(color_foreground, '#505050', 10) || !WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
-				obj.css('color', postrow_color_hex);
+			if (!WarmaneFixes.CompareColors(color_foreground, postrow_foreground_color, 10) || !WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
+				obj.css('color', '#ff0000');
+				obj.css('text-decoration', 'underline');
+			}
+			else if (typeof(postrow_bbcode_quote_foreground) !== 'undefined') {
+				if (!WarmaneFixes.CompareColors(color_foreground, postrow_bbcode_quote_foreground, 10) || !WarmaneFixes.CompareColors(color_foreground, postrow_bbcode_quote_background, 10)) {
+					obj.css('color', '#ff0000');
+					obj.css('text-decoration', 'underline');
+				}
 			}
 		});
 	});
