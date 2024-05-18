@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Warmane Fixes v2
 // @namespace    http*://*.warmane.com/
-// @version      1.1.3
+// @version      1.1.4
 // @description  Fixes various template errors and adds quality of life changes
 // @author       LeoTHPS
 // @noframes
@@ -901,12 +901,12 @@ WarmaneFixes.UpdateForumThread = function() {
 			var obj = $(this);
 			var color_foreground = obj.css('color');
 
-			if (!WarmaneFixes.CompareColors(color_foreground, postrow_foreground_color, 10) || !WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 10)) {
+			if (WarmaneFixes.CompareColors(color_foreground, postrow_foreground_color, 20) || WarmaneFixes.CompareColors(color_foreground, postrow_background_color, 20)) {
 				obj.css('color', '#ff0000');
 				obj.css('text-decoration', 'underline');
 			}
 			else if (typeof(postrow_bbcode_quote_foreground) !== 'undefined') {
-				if (!WarmaneFixes.CompareColors(color_foreground, postrow_bbcode_quote_foreground, 10) || !WarmaneFixes.CompareColors(color_foreground, postrow_bbcode_quote_background, 10)) {
+				if (WarmaneFixes.CompareColors(color_foreground, postrow_bbcode_quote_foreground, 20) || WarmaneFixes.CompareColors(color_foreground, postrow_bbcode_quote_background, 20)) {
 					obj.css('color', '#ff0000');
 					obj.css('text-decoration', 'underline');
 				}
@@ -960,6 +960,10 @@ WarmaneFixes.TryGetColorAsInteger = function(value) {
 }
 
 WarmaneFixes.CompareColors = function(color1, color2, range) {
+	if (color1 === color2) {
+		return true;
+	}
+
 	color1 = WarmaneFixes.TryGetColorAsInteger(color1);
 	color2 = WarmaneFixes.TryGetColorAsInteger(color2);
 
@@ -967,30 +971,20 @@ WarmaneFixes.CompareColors = function(color1, color2, range) {
 		return false;
 	}
 
-	var color1_r = (color1 & 0xFF0000) >> 16;
-	var color1_g = (color1 & 0x00FF00) >> 8;
-	var color1_b = color1 & 0x0000FF;
+	var color_delta_r = WarmaneFixes.CompareColorChannels((color1 & 0xFF0000) >> 16, (color2 & 0xFF0000) >> 16);
+	var color_delta_g = WarmaneFixes.CompareColorChannels((color1 & 0x00FF00) >> 8, ( color2 & 0x00FF00) >> 8);
+	var color_delta_b = WarmaneFixes.CompareColorChannels( color1 & 0x0000FF,         color2 & 0x0000FF);
+	var color_delta   = color_delta_r + color_delta_g + color_delta_b;
 
-	var color2_r = (color2 & 0xFF0000) >> 16;
-	var color2_g = (color2 & 0x00FF00) >> 8;
-	var color2_b = color2 & 0x0000FF;
-
-	return WarmaneFixes.CompareColorChannels(color1_r, color2_r, range) &&
-			WarmaneFixes.CompareColorChannels(color1_g, color2_g, range) &&
-			WarmaneFixes.CompareColorChannels(color1_b, color2_b, range);
+	return (color_delta_r + color_delta_g + color_delta_b) <= range;
 }
 
-WarmaneFixes.CompareColorChannels = function(channel1, channel2, range) {
+WarmaneFixes.CompareColorChannels = function(channel1, channel2) {
 	if (channel1 >= channel2) {
-		if ((channel1 - channel2) <= range) {
-			return true;
-		}
-	}
-	else if ((channel2 - channel1) <= range) {
-		return true;
+		return channel1 - channel2;
 	}
 
-	return false;
+	return channel2 - channel1;
 }
 
 $(window).on('load', function() {
